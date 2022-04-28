@@ -18,7 +18,9 @@ age=20
 cgpa=9.59
 tenth=98
 twelth=93
-print("Age: \(age), CGPA: \(cgpa), 10th: \(tenth), twelth: \(twelth)")
+var marks=(tenth:tenth,twelth:twelth,cgpa:cgpa)
+print("Tuple marks :\(marks)")
+print("Age: \(age), CGPA: \(marks.cgpa), 10th: \(tenth), twelth: \(marks.1)")
 var cgpaRounded=Int(cgpa)
 print("cgpaRounded: \(cgpaRounded)")
 var isStudying:Bool=true
@@ -31,6 +33,7 @@ print("distance Type - Max: \(distance.max), Min: \(distance.min)")
 
 /*
 Type of age: Int, cgpa: Double, tenth: Double, twelth: Double
+Tuple marks :(tenth: 98.0, twelth: 93.0, cgpa: 9.5899999999999999)
 Age: 20, CGPA: 9.59, 10th: 98.0, twelth: 93.0
 cgpaRounded: 9
 Still in College: true
