@@ -8,6 +8,7 @@ print(x)
 y=nil 
 print("After Changing y to nil")
 print(x)
+print(x["4"])
 
 /*
 Before Changing y to nil
