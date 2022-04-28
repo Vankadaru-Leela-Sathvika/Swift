@@ -21,9 +21,19 @@ twelth=93
 print("Age: \(age), CGPA: \(cgpa), 10th: \(tenth), twelth: \(twelth)")
 var cgpaRounded=Int(cgpa)
 print("cgpaRounded: \(cgpaRounded)")
-
+var isStudying:Bool=true
+print("Still in College: \(isStudying)")
 //Type Alias
 typealias distance = UInt8
 var toZoho:distance=40
 print("Distance to Zoho:\(toZoho)km")
-print("Max: \(distance.max), Min: \(distance.min)")
+print("distance Type - Max: \(distance.max), Min: \(distance.min)")
+
+/*
+Type of age: Int, cgpa: Double, tenth: Double, twelth: Double
+Age: 20, CGPA: 9.59, 10th: 98.0, twelth: 93.0
+cgpaRounded: 9
+Still in College: true
+Distance to Zoho:40km
+distance Type - Max: 255, Min: 0
+*/
