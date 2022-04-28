@@ -55,7 +55,13 @@ for x in start..<end{
 }
 print()
 let range1 = ...end 
+print("Range 1: \(type(of:range1))")
 let range2 = start...
+print("Range 2: \(type(of:range2))")
+let range3 = start...end 
+print("Range 3: \(type(of:range3))")
+let range4 = start..<end 
+print("Range 4: \(type(of:range4))")
 print(range1.contains(0),range1.contains(10))//true false
 print(range2.contains(0),range2.contains(10))//false true
 

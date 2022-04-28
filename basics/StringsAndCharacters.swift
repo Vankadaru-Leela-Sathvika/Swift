@@ -38,3 +38,29 @@ print("After Change: ",salutation,newSalutation,separator:"\n")
 //string access
 print("Count: \(newSalutation.count)")
 print("startIndex: \(newSalutation[newSalutation.startIndex])")
+var index=newSalutation.index(newSalutation.startIndex,offsetBy: 2)
+print("at Index 2: \(newSalutation[index])")
+print(type(of:index))//
+for index in newSalutation.indices{
+    print("\(newSalutation[index]) ", terminator: ",")
+}
+print()
+//Insert Character
+newSalutation.insert("?",at:newSalutation.endIndex)
+print(newSalutation)
+//Insert String
+newSalutation.insert(contentsOf:"How are you",at:newSalutation.index(before: newSalutation.endIndex))
+print(newSalutation)
+//remove - remove(at:index),removeSubrange(range)
+index=newSalutation.index(after:newSalutation.index(of:",")!) ?? newSalutation.endIndex
+let query=newSalutation[index...]
+print(query,type(of:query))
+if(type(of:newSalutation)==type(of:query)){
+    print("True")
+}
+else{
+    print("False")
+}
+
+//print(newSalutation.hasPrefix("Hello")) version incompatible - swift 4
+//print(newSalutation.hasSuffix("?")) version incompatible - swift 4
