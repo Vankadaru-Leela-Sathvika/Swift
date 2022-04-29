@@ -60,7 +60,55 @@ while(integer<=10){
     }
     integer+=1
 }
+// Interval matching
 
+let approximateCount = 62
+let countedThings = "moons orbiting Saturn"
+let naturalCount: String
+switch approximateCount {
+case 0:
+    naturalCount = "no"
+case 1..<5:
+    naturalCount = "a few"
+case 5..<12:
+    naturalCount = "several"
+case 12..<100:
+    naturalCount = "dozens of"
+case 100..<1000:
+    naturalCount = "hundreds of"
+default:
+    naturalCount = "many"
+}
+print("There are \(naturalCount) \(countedThings).")
+
+//Tuples
+let box=6
+let size=box/2
+let somePoint = (1, 1)
+switch somePoint {
+case (0, 0):
+    print("\(somePoint) is at the origin")
+case (_, 0):
+    print("\(somePoint) is on the x-axis")
+case (0, _):
+    print("\(somePoint) is on the y-axis")
+case (-size...size, -size...size):
+    print("\(somePoint) is inside the box")
+default:
+    print("\(somePoint) is outside of the box")
+}
+//Value Bindings and where statements
+let yetAnotherPoint = (1, -1)
+switch yetAnotherPoint {
+case let (x, y) where x == y:
+    print("(\(x), \(y)) is on the line x == y")
+case let (x, y) where x == -y:
+    print("(\(x), \(y)) is on the line x == -y")
+case let (x, y):
+    print("(\(x), \(y)) is just some arbitrary point")
+}
+
+//Compound cases
 var string = "Leela Sathvika Vankadaru"
 var vowels=0,consonants=0,others=0
 for x in string{
@@ -72,3 +120,36 @@ for x in string{
     }
 }
 print(vowels,consonants,others)
+
+//control transfer statements
+
+//continue
+//break 
+//return - functions
+//throw - Error Handling
+//fallthrough
+let integerToDescribe = 5
+var description = "The number \(integerToDescribe) is"
+switch integerToDescribe {
+case 2, 3, 5, 7, 11, 13, 17, 19:
+    description += " a prime number, and also"
+    fallthrough
+default:
+    description += " an integer."
+}
+print(description)
+
+//Labeled Statements
+var n=3
+var matrix:[[Int]]=[[1,2,3],[4,5,6],[7,8,9]]
+var search=5,count=0
+loop: for i in 0..<n{
+    for j in 0..<n{
+        if(matrix[i][j]==search){
+            print("element at \(i,j)")
+            break loop
+        }
+        count+=1
+    }
+}
+print("Number of times loop executed: \(count)")
