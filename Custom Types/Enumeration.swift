@@ -32,6 +32,7 @@ enum Season:String{
 }
 print(Season.spring.rawValue)
 
+//rawValues
 enum Planet: Int {
     case mercury = 1, venus, earth, mars, jupiter, saturn, uranus, neptune
 }
@@ -46,4 +47,26 @@ if let somePlanet = Planet(rawValue: positionToFind) {
     }
 } else {
     print("There isn't a planet at position \(positionToFind)")
+}
+
+//recursive enumerations use indirect keyword
+indirect enum LinkedListItem{
+    case endPoint(value: Int)
+    case linkNode(value: Int, next: LinkedListItem)
+}
+let third = LinkedListItem.endPoint(value: 3)
+let second = LinkedListItem.linkNode(value: 2, next: third)
+let first = LinkedListItem.linkNode(value: 1, next: second)
+
+var currentNode = first
+
+listLoop: while true {
+    switch currentNode {
+    case .endPoint(let value):
+        print(value)
+        break listLoop
+    case .linkNode(let value, let next):
+        print(value)
+        currentNode = next
+    }
 }
