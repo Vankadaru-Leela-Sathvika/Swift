@@ -90,6 +90,7 @@ struct Game{
 class Player{
     let playerName:String
     var gamesPlayed=0
+    var busy:Bool=false
     init(playerName:String){
         self.playerName=playerName
         self.wins=0
@@ -118,9 +119,16 @@ class Player{
 }
 
 class Lobby{
-    var player1:Player=Player(playerName:"Player1")
-    var player2:Player=Player(playerName:"Player2")
+    var players:[Player]=[]
+    func addPlayer(){
+        //adds player to player list
+    }
+    func selectPlayer(){
+        //selects players from player list
+    }
     func play()->Void{
+        let player1:Player=Player(playerName:"Player1")
+        let player2:Player=Player(playerName:"Player2")
         player1.gamesPlayed+=1
         player2.gamesPlayed+=1
         var game:Game=Game(playerX:player1,playerO:player2)
@@ -137,12 +145,9 @@ class Lobby{
                 flag=true
             }
         }
-        printStats()
-    }
-    func printStats(){
         print("\(player1.playerName) wins: \(player1.wins) loses: \(player1.loses) win Percentage: \(player1.winPercentage)")
         print("\(player2.playerName) wins: \(player2.wins) loses: \(player2.loses) win Percentage: \(player2.winPercentage)")
-    }   
+    }  
 }
 
 var lobby=Lobby()
