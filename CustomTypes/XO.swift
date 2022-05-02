@@ -17,22 +17,35 @@ struct Game{
         self.playerX=playerX
         self.playerO=playerO
     }
-    func didEnd()->Bool{
-        displayBoard()
-        if rows.contains(3) || cols.contains(3) || nwDiagonal == 3 || swDiagonal == 3 {
+    func endGame(x:Bool=false,o:Bool=false)->Void{
+        if x{
             print("X won")
             self.playerX.wins+=1
             self.playerO.loses+=1
-            return true
         }
-        else if rows.contains(-3) || cols.contains(-3) || nwDiagonal == -3 || swDiagonal == -3 {
+        else if o{
             print("O won")
             self.playerO.wins+=1
             self.playerX.loses+=1
+        }
+        else{
+            print("Draw")
+        }
+        playerX.busy=false 
+        playerO.busy=false
+    }
+    func didEnd()->Bool{
+        displayBoard()
+        if rows.contains(3) || cols.contains(3) || nwDiagonal == 3 || swDiagonal == 3 {
+            endGame(x:true)
+            return true
+        }
+        else if rows.contains(-3) || cols.contains(-3) || nwDiagonal == -3 || swDiagonal == -3 {
+            endGame(x:false)
             return true 
         }
         else if(count == 9){
-            print("Draw")
+            endGame()
             return true
         }
         return false
@@ -72,6 +85,7 @@ struct Game{
         }
         self.count+=1
     }
+
     func displayBoard()->Void{
         var count=0
         for row in board{
@@ -97,6 +111,37 @@ struct Game{
         }
         print()
     }
+    mutating func play()->Void{
+        playerX.gamesPlayed+=1
+        playerO.gamesPlayed+=1
+        playerX.displayStats()
+        playerO.displayStats()
+        var flag=true 
+        while(!self.didEnd()){
+            do{
+                if(flag){
+                    print("\(playerX.playerName)'s Turn")
+                    try self.mark()
+                    flag=false 
+                }
+                else{
+                    print("\(playerO.playerName)'s Turn")
+                    try self.mark(val:-1)
+                    flag=true
+                }
+            }
+            catch XOError.invalidRangeError(let row,let col) {
+                print("Enter Correct Position!!\(row,col) are not within range")
+            }
+            catch XOError.invalidEntryError{
+                print(XOError.invalidEntryError)
+            }
+            catch {
+                print("Unexpected Error!!: \(error)")
+            }
+        }
+        print()
+    }  
 }
 
 class Player{
@@ -111,11 +156,13 @@ class Player{
     var wins:Int{
         didSet{
             print("\(playerName) won another game")
+            displayStats()
         }
     }
     var loses:Int{
         didSet{
             print("\(playerName) lost another game")
+            displayStats()
         }
     }
     var winPercentage:Double{
@@ -131,58 +178,32 @@ class Player{
             return 100-winPercentage
         }
     }
-    func enterLobby()->Void{
-        //Sets player
-    }
     func displayStats()->Void{
         print("\(self.playerName) wins: \(self.wins) loses: \(self.loses) win Percentage: \(self.winPercentage) Loss Percentage: \(self.lossPercentage)")
+    }
+    func joinGame()->Void{
+        Lobby.waitingList.append(self);
     }
 }
 
 class Lobby{
-    var players:[Player]=[]
-    let player1:Player=Player(playerName:"Player1")
-    let player2:Player=Player(playerName:"Player2")
-    func addPlayer(){
+    static var players:[Player]=[]
+    static var waitingList:[Player]=[Player(playerName:"Player1"),Player(playerName:"Player2")]
+    func newPlayer(){
         //adds player to player list
     }
-    func play()->Void{
-        player1.gamesPlayed+=1
-        player2.gamesPlayed+=1
-        var game:Game=Game(playerX:player1,playerO:player2)
-        var flag=true 
-        while(!game.didEnd()){
-            do{
-                if(flag){
-                    print("\(player1.playerName)'s Turn")
-                    try game.mark()
-                    flag=false 
-                }
-                else{
-                    print("\(player2.playerName)'s Turn")
-                    try game.mark(val:-1)
-                    flag=true
-                }
-            }
-            catch XOError.invalidRangeError(let row,let col) {
-                print("Enter Correct Position!!\(row,col) are not within range")
-            }
-            catch XOError.invalidEntryError{
-                print(XOError.invalidEntryError)
-            }
-            catch {
-                print("Unexpected Error!!: \(error)")
-            }
+    func playGame()->Void{
+        //tried using concurrency but didn't work due to version needs swift >=5.5
+        while(Lobby.waitingList.count>=2){
+            let player1:Player=Lobby.waitingList.remove(at:0)
+            let player2:Player=Lobby.waitingList.remove(at:0)
+            player1.busy=true
+            player2.busy=true 
+            var game:Game=Game(playerX:player1,playerO:player2)
+            game.play()
         }
-        player1.displayStats()
-        player2.displayStats()
-        print()
-    }  
+    }
 }
 
 var lobby=Lobby()
-while(true){
-    print("New Game")
-    print()
-    lobby.play()
-}
+lobby.playGame()
