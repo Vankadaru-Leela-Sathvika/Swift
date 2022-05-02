@@ -26,7 +26,7 @@ struct Game{
             self.playerX.loses+=1
             return true 
         }
-        else if(count == 8){
+        else if(count == 9){
             print("Draw")
             return true
         }
@@ -53,7 +53,7 @@ struct Game{
                 if(x==y){
                     self.nwDiagonal+=val 
                 }
-                else if(y==3-x){
+                if(y==3-x-1){
                     self.swDiagonal+=val 
                 }
                 break gameLoop
@@ -113,8 +113,14 @@ class Player{
     }
     var lossPercentage:Double{
         get{
+            if(loses==0){
+                return 0
+            }
             return 100-winPercentage
         }
+    }
+    func enterLobby()->Void{
+        //Sets player
     }
     func displayStats()->Void{
         print("\(self.playerName) wins: \(self.wins) loses: \(self.loses) win Percentage: \(self.winPercentage) Loss Percentage: \(self.lossPercentage)")
@@ -123,15 +129,12 @@ class Player{
 
 class Lobby{
     var players:[Player]=[]
+    let player1:Player=Player(playerName:"Player1")
+    let player2:Player=Player(playerName:"Player2")
     func addPlayer(){
         //adds player to player list
     }
-    func selectPlayer(){
-        //selects players from player list
-    }
     func play()->Void{
-        let player1:Player=Player(playerName:"Player1")
-        let player2:Player=Player(playerName:"Player2")
         player1.gamesPlayed+=1
         player2.gamesPlayed+=1
         var game:Game=Game(playerX:player1,playerO:player2)
