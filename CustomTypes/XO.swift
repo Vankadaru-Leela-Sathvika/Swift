@@ -1,4 +1,9 @@
 //X-O Game
+enum XOError: Error{
+    case invalidRangeError(row:Int,col:Int)
+    case invalidEntryError
+    case invalidNumberOfDataError
+}
 struct Game{
     let playerX:Player
     let playerO:Player
@@ -39,14 +44,20 @@ struct Game{
         return false
     }
     
-    mutating func mark(val:Int=1){
-        self.count+=1
+    mutating func mark(val:Int=1)throws ->Void{
         gameLoop:while(true){
             print("Enter i,j: ",terminator:" ")
             let values = readLine()?.split(separator:" ") ?? []
-            let x = Int(values[0])!
-            let y = Int(values[1])!
-            if(!isMarked(row:x,col:y)){
+            guard values.count==2 else{
+                throw XOError.invalidNumberOfDataError
+            }
+            guard let x = Int(values[0]),let y = Int(values[1]) else{
+                throw XOError.invalidEntryError
+            }
+            guard 0<=x && x<=2 && 0<=y && y<=2 else {
+                throw XOError.invalidRangeError(row:x,col:y)
+            }
+            if !isMarked(row:x,col:y){
                 self.board[x][y]=val
                 self.rows[x]+=val 
                 self.cols[y]+=val 
@@ -59,6 +70,7 @@ struct Game{
                 break gameLoop
             }
         }
+        self.count+=1
     }
     func displayBoard()->Void{
         var count=0
@@ -140,15 +152,26 @@ class Lobby{
         var game:Game=Game(playerX:player1,playerO:player2)
         var flag=true 
         while(!game.didEnd()){
-            if(flag){
-                print("\(player1.playerName)'s Turn")
-                game.mark()
-                flag=false 
+            do{
+                if(flag){
+                    print("\(player1.playerName)'s Turn")
+                    try game.mark()
+                    flag=false 
+                }
+                else{
+                    print("\(player2.playerName)'s Turn")
+                    try game.mark(val:-1)
+                    flag=true
+                }
             }
-            else{
-                print("\(player2.playerName)'s Turn")
-                game.mark(val:-1)
-                flag=true
+            catch XOError.invalidRangeError(let row,let col) {
+                print("Enter Correct Position!!\(row,col) are not within range")
+            }
+            catch XOError.invalidEntryError{
+                print(XOError.invalidEntryError)
+            }
+            catch {
+                print("Unexpected Error!!: \(error)")
             }
         }
         player1.displayStats()
