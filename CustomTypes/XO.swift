@@ -116,6 +116,9 @@ class Player{
             return 100-winPercentage
         }
     }
+    func displayStats()->Void{
+        print("\(self.playerName) wins: \(self.wins) loses: \(self.loses) win Percentage: \(self.winPercentage) Loss Percentage: \(self.lossPercentage)")
+    }
 }
 
 class Lobby{
@@ -145,8 +148,9 @@ class Lobby{
                 flag=true
             }
         }
-        print("\(player1.playerName) wins: \(player1.wins) loses: \(player1.loses) win Percentage: \(player1.winPercentage)")
-        print("\(player2.playerName) wins: \(player2.wins) loses: \(player2.loses) win Percentage: \(player2.winPercentage)")
+        player1.displayStats()
+        player2.displayStats()
+        print()
     }  
 }
 
